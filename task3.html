@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/nullstyle.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<title>task4</title>
+	</head>
+	<body>
+		<main class="page">
+			<div class="page__container">
+				<div class="task">
+					<div class="task__condition text">
+                  Задача 4. “Рахунок у банку”
+                  Вимоги:
+                  <ol>
+                     <li> Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на
+                        рахунок, або зняттям.</li>
+                     <li> Сума автоматично переводиться у долари та євро (фіксований курс задається у data).</li>
+                     <li> можливість зарахувати суму (контролювати, щоб не була від’ємною)</li>
+                     <li> можливість зняти (щоб не можна зняти більше ніж є на рахунку)</li>
+                     <li> при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображатикількість відсотків автоматично)</li>
+                  </ol>
+                  При зміні суми :
+                  - якщо було зняття, то суму відоражати червоним
+                  - якщо було зарахування, то суму відображати зеленим
+                  Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим
+               </div>
+               
+				</div>
+            <div id="app" class="atm">
+               <div :style="{color: sumColor}" class="atm__user-sum">sum on your acaunt: {{userSum}} грн</div>
+               <div class="atm__action">
+                  <input @input="atmAudit" v-model="sumToAdd" type="number">
+                  <button @click="setSumOnAccount">Зарахувати</button>
+               </div>
+               <div class="atm__action">
+                  <input class="atm__get-money" @input="atmAudit" v-model="sumToGet" type="number">
+                  <button @click="getSumFromAccount">Зняти</button>
+               </div>
+               <div class="atm__percent">Відсотки за обслуговування: {{sumtForService}} грн</div>
+               <div>Сума у доларах: {{sumInDolar}}</div>
+               <div>Сума у євро: {{sumInEuro}}</div>
+            </div> 
+         </main>
+				<script>
+					const { createApp } = Vue
+					const app = createApp({
+						data() {
+							return {
+                        userSum: 0,
+                        sumToAdd: null,
+                        sumToGet: null,
+                        dolarRate: 38,
+                        euroRate: 40,
+                        servicePercent: 3,
+                        sumtForService: null,
+                        sumColor: null
+                     }
+						},
+                  methods: {
+                     atmAudit (e) {
+                        let element = e.target
+                        console.log(e.target.className);
+                        if (element.value < 0 || element.value.startsWith('0')) element.value = 0
+                                      
+                     },
+                     setSumOnAccount() {
+                        this.userSum+= this.sumToAdd
+                        this.calculatePercentForService (this.sumToAdd)
+                        this.sumColor = "green"
+                        this.sumToAdd =0 
+                     },
+                     getSumFromAccount () {
+                        if (this.sumToGet<=this.userSum){
+                        this.userSum-= this.sumToGet
+                        this.calculatePercentForService (this.sumToGet)
+                        this.sumColor= "red"
+                        } 
+                        this.sumToGet = 0
+                     },
+                     calculatePercentForService (sum) {
+                        this.sumtForService = (this.servicePercent * sum) / 100
+                     }
+                  },
+                  computed: {
+                     sumInDolar() {
+                        return (this.userSum / this.dolarRate).toFixed(2)
+                     },
+                     sumInEuro() {
+                        return (this.userSum / this.euroRate).toFixed(2)
+
+                     },
+                     
+                  },
+					})
+					app.mount("#app")
+				</script>
+			</div>
+	</body>
+</html>

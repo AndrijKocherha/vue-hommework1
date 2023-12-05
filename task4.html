@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/nullstyle.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<title>task4</title>
+	</head>
+	<body>
+		<main class="page">
+			<div class="page__container">
+				<div class="task">
+					<div class="task__condition text">
+						Задача 5. Додаток містить масив об’єктів (логін, пароль) -- інсуючі логіни і паролі. Користувач вводить логін і пароль, а програма повідомляє чи може
+						користувач бути авторизованим (чи є він одним з масиву).
+					</div>
+				</div>
+				<div id="app">
+					<input v-model="userLogin" type="text" /> Login
+					<br />
+					<br />
+					<input v-model="userPass" type="password" />Pasword
+					<br />
+					<br />
+					<button @click="searchPerson" class="button">Go</button>
+					<div>{{loginResult}}</div>
+				</div>
+			</div>
+			<script>
+				const { createApp } = Vue
+				const usersData = [
+					{
+						login: "Andri",
+						pass: "111",
+					},
+					{
+						login: "Yura123",
+						pass: "11L1",
+					},
+					{
+						login: "Ta1ras",
+						pass: "23K22",
+					},
+					{
+						login: "Mar42ta",
+						pass: "2D2",
+					},
+				]
+				const app = createApp({
+					data() {
+						return {
+							userLogin: null,
+							userPass: null,
+							loginResult: null,
+						}
+					},
+					methods: {
+						searchPerson() {
+							if (this.userLogin && this.userPass) {
+								for (const userData of usersData) {
+									if (userData.login === this.userLogin && userData.pass === this.userPass) {
+										this.userLogin = userData.login
+										this.userPass = userData.pass
+										this.loginResult = "вітаю ви увійшли"
+										return
+									}
+								}
+								this.loginResult = "немає такого користувача"
+							}
+						},
+					},
+				})
+				app.mount("#app")
+			</script>
+		</main>
+	</body>
+</html>

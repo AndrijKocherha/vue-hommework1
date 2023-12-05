@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="css/nullstyle.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+		<title>task1</title>
+	</head>
+	<body>
+		<main class="page">
+			<div class="page__container">
+				<div class="task">
+					<div class="task__condition text">
+						Задача 2. Вводиться номер місяця. Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….). Також автоматично виводити зображення з
+						відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).
+					</div>
+				</div>
+				<div id="app">
+					<input @input="setSeasonThings" type="number" v-model="monthNum" /> Введіть номер місяця
+					<div>Рекомендований одяг: {{seasonClothes}}</div>
+					<div><img width="400px" :src="seasonForestSrc" alt="" /></div>
+				</div>
+			</div>
+			<script>
+				const { createApp } = Vue
+				let seasonsTings = [
+					{
+						clothes: "Пальто",
+						forestTypeSrc:
+							"https://images.unsplash.com/photo-1613851472545-ad13f3631e3d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c25vdyUyMGZvcmVzdHxlbnwwfHwwfHx8MA%3D%3D",
+					},
+					{
+						clothes: "Вітровка",
+						forestTypeSrc: "https://img.goodfon.ru/wallpaper/big/d/c8/nature-spring-forest-park-6807.jpg",
+					},
+					{
+						clothes: "Шорти",
+						forestTypeSrc: "https://cache.desktopnexus.com/thumbseg/1099/1099987-bigthumbnail.jpg",
+					},
+					{
+						clothes: "Кофта",
+						forestTypeSrc: "https://cdn.hovia.com/app/uploads/Autumn-Forest-Plain-820x532.jpg",
+					},
+				]
+				const app = createApp({
+					data() {
+						return {
+							monthNum: null,
+							seasonClothes: null,
+							seasonForestSrc: null,
+						}
+					},
+					methods: {
+						setSeasonThings() {
+							if (this.monthNum <= 12 && this.monthNum >= 1) {
+								let season = Math.floor((this.monthNum % 12) / 3)
+
+								this.seasonClothes = seasonsTings[season].clothes
+								this.seasonForestSrc = seasonsTings[season].forestTypeSrc
+							} else {
+								this.seasonClothes = null
+								this.seasonForestSrc = null
+							}
+						},
+					},
+				})
+				app.mount("#app")
+			</script>
+		</main>
+	</body>
+</html>
+<!-- 12 1 2   3 4 5   6 7 8    9 10 11  -->
